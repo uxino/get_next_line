@@ -18,4 +18,5 @@ char	*ft_substr(char *s, int start, int len);
 char	*ft_strjoin(char *s1, char *s2);
 char	*ft_strdup(char *src);
 char	*get_extract(char **str);
+char 	*ft_free(char **str);
 #endif

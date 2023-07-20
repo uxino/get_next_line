@@ -2,23 +2,20 @@
 
 char	*get_extract(char **str)
 {
-	char	*next_line = ft_strchr(*str, '\n');
+	char	*next_line; 
 	char	*line;
 
-	//printf("%s\n", *str);
-	//printf("%s", next_line);
+	next_line = ft_strchr(*str, '\n');
 	if (next_line)
 	{	
 		line = ft_substr(*str, 0, next_line - *str + 1);
-		free(*str);
-		*str = NULL;
+		ft_free(str);
 		*str = ft_strdup(next_line+1);
 	}
 	else
 	{
 		line = ft_strdup(*str);
-		free(*str);
-		*str = NULL;
+		ft_free(str);
 	}
 	return (line);
 }
@@ -38,23 +35,15 @@ char *get_next_line(int fd)
 	{
     	byte = read(fd, temp, BUFFER_SIZE);
 		if (byte == -1)
-		{
-			free(str);
-			str = NULL;
-			return (NULL);
-		}
+			return (ft_free(&str));
 		temp[byte] = '\0';
 		str = ft_strjoin(str, temp);
 	}
 	if (!str[0])
-	{
-		free(str);
-		str = NULL;
-		return (str);
-	}
-	//printf("{%s}", str);
+		return (ft_free(&str));
     return (get_extract(&str));
 }
+
 // int main()
 // {
 // 	int fd = open("/Users/museker/francinette/tests/get_next_line/fsoares/1char.txt", O_RDONLY);

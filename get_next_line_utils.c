@@ -106,3 +106,9 @@ char	*ft_strdup(char *src)
 	new[i] = '\0';
 	return (new);
 }
+char *ft_free(char **str)
+{
+	free(*str);
+	*str = NULL;
+	return (*str);
+}
