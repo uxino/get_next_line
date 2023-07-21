@@ -1,22 +1,11 @@
 #include "get_next_line.h"
 
-int	ft_check(char *s, int byte)
-{
-	int	i;
-
-	i = 0;
-	while (s[i] != '\n' && s[i])
-		i++;
-	if (s[i] == '\n')
-		return (i + 1);
-	if (byte == 0)
-		return (i);
-	return (0);
-}
 int	ft_strlen(const char *str)
 {
 	int	i;
 
+	if (!str)
+		return 0;
 	i = 0;
 	while (str[i])
 		i++;
@@ -25,18 +14,29 @@ int	ft_strlen(const char *str)
 
 char	*ft_strchr(const char *s, int c)
 {
+	while (*s)
+	{
+		if (*s == (char)c)
+			return ((char *)s);
+		s++;
+	}
+	if (*s == (char)c)
+		return ((char *)s);
+	return (NULL);
+}
+
+int	ft_strchri(const char *s, int c)
+{
 	int	i;
 
 	i = 0;
 	while (s[i])
 	{
 		if (s[i] == (char)c)
-			return ((char *)(s + i));
+			return (i);
 		i++;
 	}
-	if (s[i] == (char)c)
-		return ((char *)(s + i));
-	return (NULL);
+	return (0);
 }
 
 char	*ft_substr(char *s, int start, int len)
@@ -45,9 +45,10 @@ char	*ft_substr(char *s, int start, int len)
 	int	i;
 	int	s_len;
 
-	s_len = ft_strlen(s);
 	if (!s)
 		return (NULL);
+	s_len = ft_strlen(s);
+	
 	if (len > s_len - start)
 		len = s_len - start;
 	p = (char *)malloc(sizeof(char) * (len + 1));
@@ -68,10 +69,13 @@ char	*ft_strjoin(char *s1, char *s2)
 	char	*mem;
 	int		i;
 	int		j;
-
+	
+	if (!s1 && !s2)
+		return (NULL);
+	mem = malloc((ft_strlen(s1) + (ft_strlen(s2) + 1)));
 	j = 0;
 	i = 0;
-	if (!s1 || !s2 || !(mem = malloc((ft_strlen(s1) + (ft_strlen(s2) + 1)))))
+	if (!s1 || !s2 || !(mem))
 		return (NULL);
 	while (s1[i])
 	{
@@ -81,7 +85,7 @@ char	*ft_strjoin(char *s1, char *s2)
 	while (s2[j])
 		mem[i++] = s2[j++];
 	mem[i] = '\0';
-	free(s1);
+	ft_free(&s1);
 	return (mem);
 }
 
@@ -91,6 +95,8 @@ char	*ft_strdup(char *src)
 	int		i;
 	int		size;
 
+	if (!src)
+		return NULL;
 	size = 0;
 	while (src[size])
 		++size;
@@ -106,9 +112,12 @@ char	*ft_strdup(char *src)
 	new[i] = '\0';
 	return (new);
 }
-char *ft_free(char **str)
+void *ft_free(char **str)
 {
-	free(*str);
-	*str = NULL;
-	return (*str);
+	if (str)
+	{
+		free(*str);
+		*str = NULL;
+	}
+	return (NULL);
 }
