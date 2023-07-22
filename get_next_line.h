@@ -19,4 +19,6 @@ char	*ft_strjoin(char *s1, char *s2);
 char	*ft_strdup(char *src);
 char	*get_extract(char **str);
 void 	*ft_free(char **str);
+char 	*ft_getline(char *str);
+char 	*ft_cutline(char *str);
 #endif
