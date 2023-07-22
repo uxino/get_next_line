@@ -11,75 +11,90 @@ int ft_check(char *s,int c)
 			return (i + 1);
 		i++;
 	}
-	return (0);
+	return (i);
 }
 
-char *ft_getline(char *str)
+char *ft_getline(char *s)
 {
-	char *line;
+	int	i;
+	char *arr;
 
-	line = ft_substr(str,0,ft_check(str,'\n'));
-	//printf("{line: %s}\n ",line);
-	return (line);
+	i = -1;
+	while (s[++i])
+	{
+		if (s[i] == '\n')
+			break;
+	}
+	if (s[i] == '\n')
+		i++;
+	arr = malloc(sizeof(char) * (i + 1));
+	if (!arr)
+		return (NULL);
+	i = 0;
+	while(s[i] && s[i] != '\n')
+	{
+		arr[i] = s[i];
+		i++;
+	}
+	if (s[i] == '\n')
+	{
+		arr[i] = s[i];
+		i++;
+	}
+	arr[i] = '\0';
+	return (arr);
 }
 char *ft_cutline(char *str)
 {
 	char *cuttedline;
 	int start = ft_check(str,'\n');
 	int len = (ft_strlen(str) - ft_check(str, '\n'));
-	
+	if (len == 0)
+	{
+		free(str);
+		return (NULL);
+	}
 	cuttedline = ft_substr(str, start, len);
 	//printf("{cutted line: %s}\n ",cuttedline);
 	//ft_free(&str);
 	free(str);
-	str = NULL;
 	return (cuttedline);
 }
 
 char *get_next_line(int fd)
 {
-    static char *str;
-    char temp[BUFFER_SIZE + 1];
+    static char *str = NULL;
+    char *temp;
     int byte;
 	char *line;
 
-    if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+    if (fd < 0 || BUFFER_SIZE <= 0)
         return (NULL);
-    if (!str)
-        str = ft_strdup("");
+	temp = malloc(sizeof(char) * (BUFFER_SIZE + 1));
     byte = 1;
-    while (!ft_strchr(str, '\n') && byte != 0)
+    while (!new_check(str) &&  byte != 0)
     {
         byte = read(fd, temp, BUFFER_SIZE);
         if (byte == -1)
-            return (ft_free(&str));
+		{
+			if (str)
+				free(str);
+				str = NULL;
+			free(temp);
+            return (NULL);
+		}
         temp[byte] = '\0';
-        str = ft_strjoin(str, temp);
-    }
-	line = ft_getline(str);
-	str = ft_cutline(str);
-    if (str[0] == '\0')
-        ft_free(&str);
-	if (line[0] == '\0')
+        str = ft_strjoin_gnl(str, temp);
+	}
+	free(temp);
+	if (!str || !*str)
 	{
-		free(line);
+		if (str)
+			free(str);
+		str = NULL;
 		return (NULL);
 	}
+	line = ft_getline(str);
+	str = ft_cutline(str);
     return (line);
 }
-/*
-int main()
-{
-	int fd = open("file.txt", O_RDONLY);
- 	char *line = get_next_line(fd);
-
-	while (line)
-	{
-		printf("%s", line);
-		free(line);
-		line = get_next_line(fd);
-	}
- 	close(fd);
-	//system("leaks a.out");
-}
-*/
