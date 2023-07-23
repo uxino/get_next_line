@@ -1,17 +1,6 @@
 #include "get_next_line.h"
 
-int	ft_strlen(const char *str)
-{
-	int	i;
-
-	if (!str)
-		return 0;
-	i = 0;
-	while (str[i])
-		i++;
-	return (i);
-}
-int new_check(const char *s)
+int	new_check(const char *s)
 {
 	int	i;
 
@@ -24,47 +13,18 @@ int new_check(const char *s)
 			return (1);
 		i++;
 	}
-	return(0);
-}
-
-
-char	*ft_strchr(const char *s, int c)
-{
-	while (*s)
-	{
-		if (*s == (char)c)
-			return ((char *)s);
-		s++;
-	}
-	if (*s == (char)c)
-		return ((char *)s);
-	return (NULL);
-}
-
-int	ft_strchri(const char *s, int c)
-{
-	int	i;
-
-	i = 0;
-	while (s[i])
-	{
-		if (s[i] == (char)c)
-			return (i);
-		i++;
-	}
 	return (0);
 }
 
 char	*ft_substr(char *s, int start, int len)
 {
 	char	*p;
-	int	i;
-	int	s_len;
+	int		i;
+	int		s_len;
 
 	if (!s)
 		return (NULL);
 	s_len = ft_strlen(s);
-	
 	if (len > s_len - start)
 		len = s_len - start;
 	p = (char *)malloc(sizeof(char) * (len + 1));
@@ -79,6 +39,7 @@ char	*ft_substr(char *s, int start, int len)
 	p[i] = '\0';
 	return (p);
 }
+
 char	*ft_strjoin_gnl(char *s1, char *s2)
 {
 	char	*str;
@@ -102,37 +63,4 @@ char	*ft_strjoin_gnl(char *s1, char *s2)
 	*(str + i + j) = '\0';
 	free(s1);
 	return (str);
-}
-
-char	*ft_strdup(char *src)
-{
-	char	*new;
-	int		i;
-	int		size;
-
-	if (!src)
-		return NULL;
-	size = 0;
-	while (src[size])
-		++size;
-	new = malloc(sizeof(char) * (size + 1));
-	if (!new)
-		return (NULL);
-	i = 0;
-	while (src[i])
-	{
-		new[i] = src[i];
-		i++;
-	}
-	new[i] = '\0';
-	return (new);
-}
-void *ft_free(char **str)
-{
-	if (str)
-	{
-		free(*str);
-		*str = NULL;
-	}
-	return (NULL);
 }
