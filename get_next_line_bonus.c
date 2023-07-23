@@ -1,28 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: museker <museker@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 13:52:52 by museker           #+#    #+#             */
-/*   Updated: 2023/07/23 13:52:53 by museker          ###   ########.fr       */
+/*   Updated: 2023/07/23 15:34:37 by museker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
-
-int	ft_strlen(const char *str)
-{
-	int	i;
-
-	if (!str)
-		return (0);
-	i = 0;
-	while (str[i])
-		i++;
-	return (i);
-}
+#include "get_next_line_bonus.h"
 
 char	*ft_read(char *str, int fd)
 {
@@ -104,20 +92,20 @@ char	*ft_cutline(char *str)
 
 char	*get_next_line(int fd)
 {
-	static char	*str = NULL;
+	static char	*str[OPEN_MAX];
 	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	str = ft_read(str, fd);
-	if (!str || !*str)
+	str[fd] = ft_read(str[fd], fd);
+	if (!str[fd] || !*str[fd])
 	{
-		if (str)
-			free(str);
-		str = NULL;
+		if (str[fd])
+			free(str[fd]);
+		str[fd] = NULL;
 		return (NULL);
 	}
-	line = ft_getline(str);
-	str = ft_cutline(str);
+	line = ft_getline(str[fd]);
+	str[fd] = ft_cutline(str[fd]);
 	return (line);
 }
